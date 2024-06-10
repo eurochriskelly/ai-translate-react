@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "extract": "bash scripts/run.sh",
-    "translate": "bash scripts/translate.sh"
+    "translate": "bash scripts/translate.sh",
+    "merge": "bash scripts/merge.sh"
   },
   "keywords": [],
   "author": "",
