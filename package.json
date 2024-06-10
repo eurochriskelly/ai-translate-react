@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "bash scripts/run.sh"
+    "extract": "bash scripts/run.sh",
+    "translate": "bash scripts/translate.sh"
   },
   "keywords": [],
   "author": "",
