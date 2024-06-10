@@ -10,14 +10,20 @@ const argv = yargs
     type: 'string',
     demandOption: true
   })
+  .option('model', {
+    alias: 'm',
+    description: 'The GPT model to use',
+    type: 'string',
+    demandOption: true
+  })
   .help()
   .alias('help', 'h')
   .argv;
 
-const filename = argv.filename;
+const { filename, model } = argv;
+console.log(`Using model [${model}]`)
 
 const prefix = filename.split('/').slice(-2).shift()
-console.log(filename, prefix);
 
 if (!filename) {
   console.error('Please provide a filename', error);
@@ -26,15 +32,12 @@ if (!filename) {
 
 const API_KEY = process.env['OPENAI_API_KEY'];
 
-
 const summarizeFile = async (prompt) => {
-  const testModel = 'gpt-3.5-turbo';
-  const goodModel = 'gpt-4-32k';
   try {
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
-        model: testModel,
+        model,
         messages: [
           {
             role: 'system',
@@ -75,8 +78,14 @@ const addInstructions = data => {
     `Can you extract all potential strings and give the result as json in the following format:`,
     `
     {
-      "${prefix}_someTitle": "This is a title",
-      "${prefix}_someMismatch": "Mismatch in number of parameters"
+      "${prefix}_matchOutcome": {
+        "preferredLabel": "D"
+        "contextualInformation": "Match outcome seems to allow for win, draw or lose"
+      },
+      "${prefix}_someMismatch": {
+        "preferredLabe": "Mismatch in number of parameters",
+        "contextualInformation": "An error message displayed to user when the wrong number of values are imported"
+      }
     }
     `,
     'NOTE THE ABOVE IS ONLY AN EXAMPLE OF HOW THE OUTPUT SHOULD APPEAR!',
