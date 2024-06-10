@@ -15,14 +15,17 @@ const argv = yargs
   .argv;
 
 const filename = argv.filename;
-const prefix = 'landingPage';
+
+const prefix = filename.split('/').slice(-2).shift()
+console.log(filename, prefix);
 
 if (!filename) {
   console.error('Please provide a filename', error);
   process.exit(1);
 }
 
-const API_KEY = process.env('OPENAI_API_KEY');
+const API_KEY = process.env['OPENAI_API_KEY'];
+
 
 const summarizeFile = async (prompt) => {
   const testModel = 'gpt-3.5-turbo';
@@ -92,9 +95,7 @@ fs.readFile(filename, 'utf8', async (err, data) => {
   }
   const fullMessage = addInstructions(data);
   const summary = await summarizeFile(fullMessage);
-  console.log(summary);
-  process.exit(0)
-  const summaryFilename = `${filename}.json`;
+  const summaryFilename = `/tmp/translations/${prefix}.json`;
   fs.writeFile(summaryFilename, summary, 'utf8', (err) => {
     if (err) {
       console.error(`Error writing summary to ${summaryFilename}:`, err);
