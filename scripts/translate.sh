@@ -6,9 +6,15 @@
 source ./env.sh
 HERE=$(pwd)
 
-cd /tmp/translations/
+mkdir -p /tmp/translations/English
+mkdir -p /tmp/translations/French
+
+cd /tmp/translations/English
+lang=French
 
 for f in $(ls *.json);do
   echo "Translating english version [$f]"
-  node ${HERE}/src/generate-translations.js --filename "/tmp/translations/$f" --model "gpt-4" --lang "French" --no-clobber
+  node ${HERE}/src/generate-translations.js --filename "/tmp/translations/English/$f" --model "gpt-4" --lang "$lang" --no-clobber
 done
+
+mv /tmp/translations/English/*-French.json /tmp/translations/French/

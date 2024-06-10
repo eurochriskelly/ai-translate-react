@@ -2,7 +2,6 @@ const fs = require('fs');
 const axios = require('axios');
 const yargs = require('yargs');
 
-
 // Command line argument parsing
 const argv = yargs
   .option('filename', {
@@ -28,9 +27,7 @@ const argv = yargs
 
 const { filename, model, clobber } = argv;
 console.log(`Using model [${model}]`)
-
 const prefix = filename.split('/').slice(-2).shift()
-
 const fname = `/tmp/translations/${prefix}.json`
 if (fs.existsSync(fname) && !clobber) {
   console.log(`Skipping existing translation [${fname}] due to --no-clobber option`);
@@ -53,14 +50,17 @@ const summarizeFile = async (prompt) => {
         messages: [
           {
             role: 'system',
-            content: 'Respond with JSON matching the user request. Do not add any formatting to the JSON response'
+            content: [
+              'Respond with JSON matching the user request. Do not add any formatting to the JSON response',
+              'VERY IMPORTANT: ONLY OUTPUT JSON. IF ERROR PUT IT IN JSON!',
+            ].join('\n')
           },
           {
             role: 'user',
             content: prompt
           },
         ],
-        max_tokens: 300,
+        max_tokens: 4000,
       },
       {
         headers: {

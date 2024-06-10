@@ -72,7 +72,8 @@ const translateFile = async (prompt) => {
                  etc.
               }`,
               '',
-              'The user will provide the language and any additional instructions'
+              'The user will provide the language and any additional instructions',
+              'VERY IMPORTANT: ONLY OUTPUT JSON. IF ERROR PUT IT IN JSON!'
             ].join('\n')
           },
           {
