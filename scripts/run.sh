@@ -11,8 +11,7 @@ mkdir -p /tmp/translations
 for f in $(find . -name "index.jsx");do
   echo "Extracting strings for react file [$f]" 
   # get the prefix
-  node ${HERE}/src/extract-lang-strings.js --filename $f --model "gpt-4"
-  read x
+  node ${HERE}/src/extract-lang-strings.js --filename $f --model "gpt-4" --no-clobber
 done
 exit 0
 

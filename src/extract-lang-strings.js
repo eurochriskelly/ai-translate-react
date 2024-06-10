@@ -2,6 +2,7 @@ const fs = require('fs');
 const axios = require('axios');
 const yargs = require('yargs');
 
+
 // Command line argument parsing
 const argv = yargs
   .option('filename', {
@@ -16,14 +17,25 @@ const argv = yargs
     type: 'string',
     demandOption: true
   })
+  .option('no-clobber', {
+    alias: 'n',
+    description: 'Do not clobber',
+    type: 'boolean',
+  })
   .help()
   .alias('help', 'h')
   .argv;
 
-const { filename, model } = argv;
+const { filename, model, clobber } = argv;
 console.log(`Using model [${model}]`)
 
 const prefix = filename.split('/').slice(-2).shift()
+
+const fname = `/tmp/translations/${prefix}.json`
+if (fs.existsSync(fname) && !clobber) {
+  console.log(`Skipping existing translation [${fname}] due to --no-clobber option`);
+  process.exit(0);
+}
 
 if (!filename) {
   console.error('Please provide a filename', error);
